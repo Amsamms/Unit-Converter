@@ -1,7 +1,6 @@
 import streamlit as st
 from pint import UnitRegistry
 import pint.errors
-import streamlit
 
 # Create a unit registry
 ureg = UnitRegistry()

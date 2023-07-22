@@ -6,6 +6,7 @@ import pint.errors
 ureg = UnitRegistry()
 
 # creat cubic meter, use the below to define any unit to be in the registry
+# I told pint that cubic_meter = 1000 * liter
 ureg.define('cubic_meter = 1e3 * liter = m^3 = cu_m = cu_meter')
 
 # Get all units

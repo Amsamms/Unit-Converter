@@ -12,7 +12,7 @@ The Universal Unit Converter supports conversion between up to three different u
 4. The app will perform the calculation and display the result in the selected unit.
 5. The app also shows alternative combinations of units that are dimensionally equivalent to the selected units. You can select one of these combinations to see the quantity in a different unit.
 
-![Screenshot of app](screenshot.png)
+![Screenshot of app](app_pic.png)
 
 ## Running the App Locally
 

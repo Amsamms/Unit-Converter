@@ -5,6 +5,9 @@ import pint.errors
 # Create a unit registry
 ureg = UnitRegistry()
 
+# creat cubic meter, use the below to define any unit to be in the registry
+ureg.define('cubic_meter = 1e3 * liter = m^3 = cu_m = cu_meter')
+
 # Get all units
 all_units = sorted(list(ureg._units.keys()))
 # Initialize all variables to None

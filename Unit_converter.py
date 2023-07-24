@@ -9,6 +9,9 @@ ureg = UnitRegistry()
 ureg.define('cubic_meter = 1e3 * liter = cu_meter')
 ureg.define('square_meter = 10.76391042 * square_feet')
 ureg.define('square_centimeter = 0.001076391042 * square_feet')
+ureg.define('mm_H2O = 0.1 * cmH2O')
+ureg.define('kilo_pascal = 1e3 * pascal')
+ureg.define('mega_pascal = 1e6 * pascal')
 
 # Get all units
 all_units = sorted(list(ureg._units.keys()))

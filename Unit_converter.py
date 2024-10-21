@@ -1,11 +1,12 @@
 import streamlit as st
 from pint import UnitRegistry
 import pint.errors
+import pandas as pd
 
 # Create a unit registry
 ureg = UnitRegistry()
 
-# creat some extra units to be in the registry
+# Create some extra units to be in the registry
 ureg.define('cubic_meter = 1e3 * liter = cu_meter')
 ureg.define('square_meter = 10.76391042 * square_feet')
 ureg.define('square_centimeter = 0.001076391042 * square_feet')
@@ -27,11 +28,10 @@ operation_23 = None
 
 st.markdown("""
     <div style="border: 2px solid blue; padding: 10px; border-radius: 5px;">
-        <h1 style="text-align: center;">🌐 Universal Unit Converter 🌐</h1>
+        <h1 style="text-align: center;">\U0001F310 Universal Unit Converter \U0001F310</h1>
     </div>
     <br/><br/>
 """, unsafe_allow_html=True)
-
 
 st.sidebar.title("Instructions")
 
@@ -65,41 +65,42 @@ If you want to convert mass flow rate from `120` `kg/hour` to `pound/second`, he
 """)
 st.sidebar.markdown('---')
 
-
-
 # User selects the number of units
-#num_units = st.selectbox("Select the number of units:", [1, 2, 3], key='num_units')
-st.markdown("## number of units selection")
+st.markdown("## Number of Units Selection")
 num_units = st.slider("Select the number of units:", 1, 3, key='num_units')
 st.markdown('---')
 
 if num_units >= 1:
-    st.markdown("## Unit 1")
-    # First drop-down menu for unit type
-    selected_unit_1 = st.selectbox("Select the first unit type:", all_units, key='unit_1', index=all_units.index('second'))
-    # Input field for the quantity of the first unit
-    quantity_value_1 = st.number_input("Enter the quantity for the first unit", min_value=0.0, value=1.0, key='unit_1_value')
+    st.markdown("### Unit 1")
+    col1, col2 = st.columns(2)
+    with col1:
+        selected_unit_1 = st.selectbox("Select the first unit type:", all_units, key='unit_1', index=all_units.index('second'))
+    with col2:
+        quantity_value_1 = st.number_input("Enter the quantity for the first unit", min_value=0.0, value=1.0, key='unit_1_value')
     st.markdown('---')
 
 if num_units >= 2:
-    st.markdown("## Unit 2")
-    # Operation radio button
-    operation_12 = st.radio('Operation:', ('multiply', 'divide'), key='12')
-    # Second drop-down menu for unit type
-    selected_unit_2 = st.selectbox("Select the second unit type:", all_units,key='unit_2', index=all_units.index('second'))
-    # Input field for the quantity of the second unit
-    quantity_value_2 = st.number_input("Enter the quantity for the second unit", min_value=0.0, value=1.0, key='unit_2_value')
+    st.markdown("### Unit 2")
+    col3, col4, col5 = st.columns([2, 1, 2])
+    with col3:
+        selected_unit_2 = st.selectbox("Select the second unit type:", all_units, key='unit_2', index=all_units.index('second'))
+    with col4:
+        operation_12 = st.radio('Operation:', ('multiply', 'divide'), key='12')
+    with col5:
+        quantity_value_2 = st.number_input("Enter the quantity for the second unit", min_value=0.0, value=1.0, key='unit_2_value')
     st.markdown('---')
 
 if num_units == 3:
-    st.markdown("## Unit 3")
-    # Operation radio button
-    operation_23 = st.radio('Operation:', ('multiply', 'divide'),key='23')
-    # Third drop-down menu for unit type
-    selected_unit_3 = st.selectbox("Select the third unit type:", all_units, key='unit_3', index=all_units.index('second'))
-    # Input field for the quantity of the third unit
-    quantity_value_3 = st.number_input("Enter the quantity for the third unit", min_value=0.0, value=1.0, key='unit_3_value')
+    st.markdown("### Unit 3")
+    col6, col7, col8 = st.columns([2, 1, 2])
+    with col6:
+        selected_unit_3 = st.selectbox("Select the third unit type:", all_units, key='unit_3', index=all_units.index('second'))
+    with col7:
+        operation_23 = st.radio('Operation:', ('multiply', 'divide'), key='23')
+    with col8:
+        quantity_value_3 = st.number_input("Enter the quantity for the third unit", min_value=0.0, value=1.0, key='unit_3_value')
     st.markdown('---')
+
 # Perform calculation and display dimensionality
 try:
     # Create quantities with both value and unit
@@ -108,30 +109,24 @@ try:
     quantity_3 = ureg.Quantity(quantity_value_3, selected_unit_3) if selected_unit_3 is not None else None
 
     if quantity_1 is not None and quantity_2 is not None and quantity_3 is not None:
-        if operation_12 == 'multiply' and operation_23== 'multiply' :
+        if operation_12 == 'multiply' and operation_23 == 'multiply':
             final_quantity = quantity_1 * quantity_2 * quantity_3
-        elif operation_12 == 'divide' and operation_23 == 'divide' :
+        elif operation_12 == 'divide' and operation_23 == 'divide':
             final_quantity = quantity_1 / quantity_2 / quantity_3
-        elif operation_12 == 'divide' and operation_23 == 'multiply' :
+        elif operation_12 == 'divide' and operation_23 == 'multiply':
             final_quantity = quantity_1 / quantity_2 * quantity_3
-        elif operation_12 == 'multiply' and operation_23 == 'divide' :
+        elif operation_12 == 'multiply' and operation_23 == 'divide':
             final_quantity = quantity_1 * quantity_2 / quantity_3
     elif quantity_1 is not None and quantity_2 is not None:
         if operation_12 == 'multiply':
-          final_quantity = quantity_1 * quantity_2
+            final_quantity = quantity_1 * quantity_2
         elif operation_12 == 'divide':
-          final_quantity = quantity_1 / quantity_2
-    elif quantity_1 is not None :
+            final_quantity = quantity_1 / quantity_2
+    elif quantity_1 is not None:
         final_quantity = quantity_1
-        
-        
-    #st.write(final_quantity)
-    #st.write(final_quantity.magnitude)
-    #st.write(final_quantity.units)
-    #st.write(final_quantity.dimensionality)
-               
+
 except Exception as e:
-    st.write("An error occurred in difining final_quantity:")
+    st.write("An error occurred in defining final_quantity:")
     st.write(str(e))
 
 # preparing all possible combinations
@@ -200,31 +195,24 @@ try:
                     compatible_units_1.append(unit)
             except pint.errors.UndefinedUnitError:
                 pass
-            possible_combinations = [f"{unit1}" for unit1 in compatible_units_1]
-            possible_combinations = list(set(possible_combinations))                 
-    st.markdown('---')         
-    st.markdown("## select a combatible unit to convert to ")
+        possible_combinations = [f"{unit1}" for unit1 in compatible_units_1]
+        possible_combinations = list(set(possible_combinations))
+    st.markdown('---')
+    st.markdown("## Select a Compatible Unit to Convert To ")
     selected_combination = st.selectbox("Select a combination:", possible_combinations, key='possible_combination')
-    st.write(f'there are {len(possible_combinations)} selection available')
+    st.write(f'There are {len(possible_combinations)} selection(s) available')
+
+    # Display initial and converted result below the columns
+    if 'final_quantity' in locals() and 'selected_combination' in locals():
+        converted_quantity = final_quantity.to(selected_combination)
+        result_df = pd.DataFrame({
+            "Description": ["Initial Quantity", "Converted Quantity"],
+            "Value": [final_quantity.magnitude, converted_quantity.magnitude],
+            "Unit of Measurement": [str(final_quantity.units), str(converted_quantity.units)]
+        })
+        st.markdown('---')
+        st.write("### Conversion Result")
+        st.dataframe(result_df)
 except Exception as L:
     st.write("An error occurred in finding alternative combinations:")
     st.write(str(L))
-try:  
-    # Convert the final quantity to the selected combination
-    converted_quantity = final_quantity.to(selected_combination)
-    st.markdown('---')  
-    #st.write(f"the initial quantity of {final_quantity.magnitude} in {final_quantity.units} equal to {converted_quantity.magnitude} in {converted_quantity.units}.")
-    # Write output
-    st.markdown(
-        f"The initial quantity of <span style='color:blue;font-weight:bold'>{final_quantity.magnitude}</span> in "
-        f"<span style='color:blue;font-weight:bold'>{final_quantity.units}</span><br/>"
-        f"is equal to:<br/>"
-        f"<span style='color:red;font-weight:bold'>{converted_quantity.magnitude}</span> in "
-        f"<span style='color:red;font-weight:bold'>{converted_quantity.units}</span>.",
-        unsafe_allow_html=True,
-    )
-except Exception as o:
-    st.write("An error occurred in conversion:")
-    st.write(str(o))
-    
-

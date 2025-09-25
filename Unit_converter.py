@@ -26,80 +26,545 @@ quantity_value_3 = None
 operation_12 = None
 operation_23 = None
 
+# Configure page
+st.set_page_config(
+    page_title="Universal Unit Converter",
+    page_icon="🔄",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Modern UI Design - Complete Makeover
 st.markdown("""
-    <div style="border: 2px solid blue; padding: 10px; border-radius: 5px;">
-        <h1 style="text-align: center;">\U0001F310 Universal Unit Converter \U0001F310</h1>
-    </div>
-    <br/><br/>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    /* Modern clean background */
+    .stApp {
+        background: #f8fafc;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .main .block-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        border: 1px solid #e2e8f0;
+        max-width: 1000px;
+        margin-top: 2rem;
+    }
+
+    /* Modern header */
+    .hero-section {
+        text-align: center;
+        padding: 3rem 0 2rem 0;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        border-radius: 16px;
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        opacity: 0.5;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-title {
+        color: white;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0 0 0.5rem 0;
+        letter-spacing: -0.025em;
+    }
+
+    .hero-subtitle {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.1rem;
+        font-weight: 400;
+        margin: 0;
+    }
+
+    /* Card system */
+    .conversion-card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+
+    .conversion-card:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        border-color: #c7d2fe;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin: 0 0 1rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .card-subtitle {
+        color: #64748b;
+        font-size: 0.9rem;
+        margin: 0 0 1rem 0;
+    }
+
+    /* Mode selector */
+    .mode-selector {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+
+    .mode-card {
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 1.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+        position: relative;
+    }
+
+    .mode-card:hover {
+        border-color: #6366f1;
+        background: #f8faff;
+    }
+
+    .mode-card.active {
+        border-color: #6366f1;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.25);
+    }
+
+    .mode-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .mode-title {
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .mode-desc {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        margin: 0;
+    }
+
+    /* Input styling */
+    .input-group {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1rem;
+        align-items: end;
+    }
+
+    .input-label {
+        font-weight: 500;
+        color: #374151;
+        margin: 0 0 0.5rem 0;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+    }
+
+    /* Operation flow */
+    .operation-flow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 2rem 0;
+        position: relative;
+    }
+
+    .flow-line {
+        height: 2px;
+        background: linear-gradient(90deg, #e2e8f0 0%, #6366f1 50%, #e2e8f0 100%);
+        flex: 1;
+    }
+
+    .operation-pill {
+        background: white;
+        border: 2px solid #6366f1;
+        border-radius: 50px;
+        padding: 0.75rem 1.5rem;
+        margin: 0 1rem;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+        min-width: 160px;
+        text-align: center;
+    }
+
+    .operation-title {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #6366f1;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        margin: 0 0 0.25rem 0;
+    }
+
+    /* Results section */
+    .results-section {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%);
+        border-radius: 16px;
+        padding: 2rem;
+        margin-top: 2rem;
+        border: 1px solid #c7d2fe;
+    }
+
+    .results-title {
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 1.5rem 0;
+    }
+
+    .result-cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .result-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        border: 1px solid #e2e8f0;
+    }
+
+    .result-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .result-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 0.25rem 0;
+    }
+
+    .result-unit {
+        font-size: 0.9rem;
+        color: #6366f1;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    /* Conversion factor */
+    .conversion-factor {
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid #c7d2fe;
+        border-radius: 8px;
+        padding: 1rem;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #374151;
+    }
+
+    /* Modern form controls */
+    .stSelectbox > div > div > div {
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .stNumberInput > div > div > input {
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .stRadio > div {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .stRadio > div > label {
+        background: white;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: 'Inter', sans-serif;
+        font-weight: 500;
+        margin: 0;
+        flex: 1;
+        text-align: center;
+    }
+
+    .stRadio > div > label:hover {
+        border-color: #6366f1;
+        background: #f8faff;
+    }
+
+    /* Mode selection radio buttons - make them minimal */
+    .stRadio[data-testid="stRadio"] > div {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .stRadio[data-testid="stRadio"] > div > label {
+        font-size: 0.9rem;
+        padding: 0.5rem;
+        margin: 0;
+        border: none;
+        background: transparent;
+        width: 100%;
+    }
+
+    .stRadio[data-testid="stRadio"] > div > label:hover {
+        background: #f1f5f9;
+        border-radius: 6px;
+    }
+
+    /* Hide default Streamlit styling */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+
+    .stDeployButton {display: none;}
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+
+        .mode-selector {
+            grid-template-columns: 1fr;
+        }
+
+        .input-group {
+            grid-template-columns: 1fr;
+        }
+
+        .result-cards {
+            grid-template-columns: 1fr;
+        }
+
+        .operation-flow {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .flow-line {
+            display: none;
+        }
+    }
+</style>
 """, unsafe_allow_html=True)
 
-st.sidebar.title("Instructions")
+# Modern hero section
+st.markdown("""
+<div class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title">Universal Unit Converter</h1>
+        <p class="hero-subtitle">Convert any measurement with precision and ease</p>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+st.sidebar.title("📋 Step-by-Step Guide")
 
 st.sidebar.markdown("""
-1. **Select the number of units** you want to convert. You can choose up to 3 units.
+### 🎯 **How to Use This Converter**
 
-2. For each unit, **select the unit type** and **enter the quantity**. 
+**Step 1: Choose Complexity**
+Select how many units you need (1-3 units)
 
-3. If you are converting more than one unit, **select the operation** (multiply or divide) that should be performed between the units.
+**Step 2: Configure Units**
+- Pick your unit type from the dropdown
+- Enter the quantity value
+- Choose operations (×, ÷) between units
 
-4. After entering your inputs, the app will **perform the calculation** and display the result in the unit you selected. 
+**Step 3: Select Output Format**
+Pick your desired output unit combination
 
-5. The app will also show **alternative combinations** of units that are dimensionally equivalent to the units you selected.
-
-6. You can select one of these combinations to **see the quantity in a different unit**.
-
-Remember, the operations are performed from left to right. So if you have 3 units, and you choose to multiply then divide, the app will first multiply the first two units, then divide by the third unit.
+**Step 4: View Results**
+See your conversion with precision!
 
 ---
 
-**Example:**
+### 💡 **Pro Tips**
 
-If you want to convert mass flow rate from `120` `kg/hour` to `pound/second`, here's how to do it:
+✨ **Single Unit**: Perfect for basic conversions like meters to feet
 
-- Set the number of units to `2`.
-- For the first unit, select `kilogram` and enter the quantity of `120`.
-- Set the operation with the next unit to `divide`.
-- For the second unit, select `hour` or `hr` and enter `1` as the quantity.
-- In the possible combinations, select `pound/sec`.
-- The result would be displayed down as `0.07348742072829254 pound/second`
+🔗 **Two Units**: Great for rates like speed (distance/time) or density (mass/volume)
+
+⚡ **Three Units**: Handle complex units like acceleration (distance/time²)
+
+---
+
+### 🚀 **Quick Example**
+
+**Converting 120 kg/hour to pound/second:**
+
+1. Set units to **2**
+2. Unit 1: `kilogram` with value `120`
+3. Operation: **divide** (÷)
+4. Unit 2: `hour` with value `1`
+5. Select output: `pound/second`
+6. Result: `0.0735 pound/second`
+
+---
+
+### ⚠️ **Important Notes**
+
+- Operations are performed **left to right**
+- All calculations maintain **dimensional consistency**
+- Choose compatible units for accurate results
 """)
-st.sidebar.markdown('---')
 
-# User selects the number of units
-st.markdown("## Number of Units Selection")
-num_units = st.slider("Select the number of units:", 1, 3, key='num_units')
-st.markdown('---')
+# Mode selection with modern cards
+st.markdown('<h2 style="text-align: center; margin: 2rem 0 1rem 0; color: #1e293b; font-weight: 700;">Choose Conversion Type</h2>', unsafe_allow_html=True)
+
+# Use radio buttons styled as cards to avoid the button reset issue
+mode_options = [
+    "🔢 Single Unit - Convert between different units of the same measurement",
+    "⚡ Compound Units - Handle rates, ratios, and combined measurements",
+    "🚀 Complex Units - Advanced conversions with multiple operations"
+]
+
+selected_mode = st.radio("", mode_options, key="conversion_mode")
+
+# Map selection to number of units
+if "Single Unit" in selected_mode:
+    num_units = 1
+elif "Compound Units" in selected_mode:
+    num_units = 2
+else:  # Complex Units
+    num_units = 3
+
+# Display mode cards with active state (visual feedback only)
+st.markdown(f"""
+<div class="mode-selector">
+    <div class="mode-card {'active' if num_units == 1 else ''}">
+        <span class="mode-icon">🔢</span>
+        <h3 class="mode-title">Single Unit</h3>
+        <p class="mode-desc">Convert between different units of the same measurement</p>
+    </div>
+    <div class="mode-card {'active' if num_units == 2 else ''}">
+        <span class="mode-icon">⚡</span>
+        <h3 class="mode-title">Compound Units</h3>
+        <p class="mode-desc">Handle rates, ratios, and combined measurements</p>
+    </div>
+    <div class="mode-card {'active' if num_units == 3 else ''}">
+        <span class="mode-icon">🚀</span>
+        <h3 class="mode-title">Complex Units</h3>
+        <p class="mode-desc">Advanced conversions with multiple operations</p>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 if num_units >= 1:
-    st.markdown("### Unit 1")
-    col1, col2 = st.columns(2)
+    st.markdown("""
+    <div class="conversion-card">
+        <h3 class="card-title">📊 First Unit</h3>
+        <p class="card-subtitle">Select your starting measurement unit and enter its value</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col1, col2 = st.columns([2, 1])
     with col1:
-        selected_unit_1 = st.selectbox("Select the first unit type:", all_units, key='unit_1', index=all_units.index('second'))
+        selected_unit_1 = st.selectbox("Unit Type", all_units, key='unit_1', index=all_units.index('second'))
     with col2:
-        quantity_value_1 = st.number_input("Enter the quantity for the first unit", min_value=0.0, value=1.0, key='unit_1_value')
-    st.markdown('---')
+        quantity_value_1 = st.number_input("Value", min_value=0.0, value=1.0, key='unit_1_value')
 
 if num_units >= 2:
-    st.markdown("### Unit 2")
-    col3, col4, col5 = st.columns([2, 1, 2])
+    st.markdown("""
+    <div class="conversion-card">
+        <h3 class="card-title">⚡ Second Unit</h3>
+        <p class="card-subtitle">Add a second measurement for compound unit conversion</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col3, col4 = st.columns([2, 1])
     with col3:
-        selected_unit_2 = st.selectbox("Select the second unit type:", all_units, key='unit_2', index=all_units.index('second'))
+        selected_unit_2 = st.selectbox("Unit Type", all_units, key='unit_2', index=all_units.index('second'))
     with col4:
-        operation_12 = st.radio('Operation:', ('multiply', 'divide'), key='12')
-    with col5:
-        quantity_value_2 = st.number_input("Enter the quantity for the second unit", min_value=0.0, value=1.0, key='unit_2_value')
-    st.markdown('---')
+        quantity_value_2 = st.number_input("Value", min_value=0.0, value=1.0, key='unit_2_value')
+
+    # Modern operation selection
+    st.markdown("""
+    <div class="operation-flow">
+        <div class="flow-line"></div>
+        <div class="operation-pill">
+            <div class="operation-title">Operation</div>
+        </div>
+        <div class="flow-line"></div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    operation_12 = st.radio("Choose how to combine the units:", ('✖️ Multiply', '➗ Divide'), key='12')
 
 if num_units == 3:
-    st.markdown("### Unit 3")
-    col6, col7, col8 = st.columns([2, 1, 2])
+    st.markdown("""
+    <div class="conversion-card">
+        <h3 class="card-title">🚀 Third Unit</h3>
+        <p class="card-subtitle">Add a third measurement for advanced unit conversions</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col5, col6 = st.columns([2, 1])
+    with col5:
+        selected_unit_3 = st.selectbox("Unit Type", all_units, key='unit_3', index=all_units.index('second'))
     with col6:
-        selected_unit_3 = st.selectbox("Select the third unit type:", all_units, key='unit_3', index=all_units.index('second'))
-    with col7:
-        operation_23 = st.radio('Operation:', ('multiply', 'divide'), key='23')
-    with col8:
-        quantity_value_3 = st.number_input("Enter the quantity for the third unit", min_value=0.0, value=1.0, key='unit_3_value')
-    st.markdown('---')
+        quantity_value_3 = st.number_input("Value", min_value=0.0, value=1.0, key='unit_3_value')
+
+    # Second operation selection
+    st.markdown("""
+    <div class="operation-flow">
+        <div class="flow-line"></div>
+        <div class="operation-pill">
+            <div class="operation-title">Second Operation</div>
+        </div>
+        <div class="flow-line"></div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    operation_23 = st.radio("Choose the second operation:", ('✖️ Multiply', '➗ Divide'), key='23')
 
 # Perform calculation and display dimensionality
 try:
@@ -108,19 +573,23 @@ try:
     quantity_2 = ureg.Quantity(quantity_value_2, selected_unit_2) if selected_unit_2 is not None else None
     quantity_3 = ureg.Quantity(quantity_value_3, selected_unit_3) if selected_unit_3 is not None else None
 
+    # Convert operation text to simple operation names for logic
+    op_12_simple = 'multiply' if operation_12 and 'Multiply' in operation_12 else 'divide'
+    op_23_simple = 'multiply' if operation_23 and 'Multiply' in operation_23 else 'divide'
+
     if quantity_1 is not None and quantity_2 is not None and quantity_3 is not None:
-        if operation_12 == 'multiply' and operation_23 == 'multiply':
+        if op_12_simple == 'multiply' and op_23_simple == 'multiply':
             final_quantity = quantity_1 * quantity_2 * quantity_3
-        elif operation_12 == 'divide' and operation_23 == 'divide':
+        elif op_12_simple == 'divide' and op_23_simple == 'divide':
             final_quantity = quantity_1 / quantity_2 / quantity_3
-        elif operation_12 == 'divide' and operation_23 == 'multiply':
+        elif op_12_simple == 'divide' and op_23_simple == 'multiply':
             final_quantity = quantity_1 / quantity_2 * quantity_3
-        elif operation_12 == 'multiply' and operation_23 == 'divide':
+        elif op_12_simple == 'multiply' and op_23_simple == 'divide':
             final_quantity = quantity_1 * quantity_2 / quantity_3
     elif quantity_1 is not None and quantity_2 is not None:
-        if operation_12 == 'multiply':
+        if op_12_simple == 'multiply':
             final_quantity = quantity_1 * quantity_2
-        elif operation_12 == 'divide':
+        elif op_12_simple == 'divide':
             final_quantity = quantity_1 / quantity_2
     elif quantity_1 is not None:
         final_quantity = quantity_1
@@ -157,13 +626,13 @@ try:
             except pint.errors.UndefinedUnitError:
                 pass
         # Prepare a list of possible combinations for the final quantity
-        if operation_12 == 'divide' and operation_23 == 'divide':
+        if op_12_simple == 'divide' and op_23_simple == 'divide':
             possible_combinations = [f"{unit1}/{unit2}/{unit3}" for unit1 in compatible_units_1 for unit2 in compatible_units_2 for unit3 in compatible_units_3]
-        if operation_12 == 'multiply' and operation_23 == 'multiply':
+        if op_12_simple == 'multiply' and op_23_simple == 'multiply':
             possible_combinations = [f"{unit1}*{unit2}*{unit3}" for unit1 in compatible_units_1 for unit2 in compatible_units_2 for unit3 in compatible_units_3]
-        if operation_12 == 'multiply' and operation_23 == 'divide':
+        if op_12_simple == 'multiply' and op_23_simple == 'divide':
             possible_combinations = [f"{unit1}*{unit2}/{unit3}" for unit1 in compatible_units_1 for unit2 in compatible_units_2 for unit3 in compatible_units_3]
-        if operation_12 == 'divide' and operation_23 == 'multiply':
+        if op_12_simple == 'divide' and op_23_simple == 'multiply':
             possible_combinations = [f"{unit1}/{unit2}*{unit3}" for unit1 in compatible_units_1 for unit2 in compatible_units_2 for unit3 in compatible_units_3]
     elif quantity_1 is not None and quantity_2 is not None:
         # Prepare a list of compatible units for the first unit
@@ -183,9 +652,9 @@ try:
             except pint.errors.UndefinedUnitError:
                 pass
         # Prepare a list of possible combinations for the final quantity
-        if operation_12 == 'divide':
+        if op_12_simple == 'divide':
             possible_combinations = [f"{unit1}/{unit2}" for unit1 in compatible_units_1 for unit2 in compatible_units_2]
-        elif operation_12 == 'multiply':
+        elif op_12_simple == 'multiply':
             possible_combinations = [f"{unit1}*{unit2}" for unit1 in compatible_units_1 for unit2 in compatible_units_2]
     elif quantity_1 is not None:
         compatible_units_1 = []
@@ -197,22 +666,60 @@ try:
                 pass
         possible_combinations = [f"{unit1}" for unit1 in compatible_units_1]
         possible_combinations = list(set(possible_combinations))
-    st.markdown('---')
-    st.markdown("## Select a Compatible Unit to Convert To ")
-    selected_combination = st.selectbox("Select a combination:", possible_combinations, key='possible_combination')
-    st.write(f'There are {len(possible_combinations)} selection(s) available')
 
-    # Display initial and converted result below the columns
+    st.markdown("""
+    <div class="conversion-card">
+        <h3 class="card-title">🎯 Choose Output Format</h3>
+        <p class="card-subtitle">Select your desired output unit from dimensionally compatible options</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    selected_combination = st.selectbox("Output Unit", possible_combinations, key='possible_combination')
+    st.info(f"Found {len(possible_combinations)} compatible unit format(s)")
+
+    # Modern results display
     if 'final_quantity' in locals() and 'selected_combination' in locals():
         converted_quantity = final_quantity.to(selected_combination)
+
+        st.markdown("""
+        <div class="results-section">
+            <h2 class="results-title">✨ Conversion Results</h2>
+            <div class="result-cards">
+                <div class="result-card">
+                    <div class="result-label">Input</div>
+                    <div class="result-value">{:.6g}</div>
+                    <div class="result-unit">{}</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">Output</div>
+                    <div class="result-value">{:.6g}</div>
+                    <div class="result-unit">{}</div>
+                </div>
+            </div>
+        </div>
+        """.format(
+            final_quantity.magnitude, str(final_quantity.units),
+            converted_quantity.magnitude, str(converted_quantity.units)
+        ), unsafe_allow_html=True)
+
+        # Original DataFrame for data integrity
         result_df = pd.DataFrame({
             "Description": ["Initial Quantity", "Converted Quantity"],
             "Value": [final_quantity.magnitude, converted_quantity.magnitude],
             "Unit of Measurement": [str(final_quantity.units), str(converted_quantity.units)]
         })
-        st.markdown('---')
-        st.write("### Conversion Result")
-        st.dataframe(result_df)
+
+        with st.expander("📊 Detailed Data Table"):
+            st.dataframe(result_df)
+
+        # Conversion factor
+        if final_quantity.magnitude != 0:
+            conversion_factor = converted_quantity.magnitude / final_quantity.magnitude
+            st.markdown(f"""
+            <div class="conversion-factor">
+                <strong>Conversion Factor:</strong> 1 {str(final_quantity.units)} = {conversion_factor:.6g} {str(converted_quantity.units)}
+            </div>
+            """, unsafe_allow_html=True)
 except Exception as L:
     st.write("An error occurred in finding alternative combinations:")
     st.write(str(L))
